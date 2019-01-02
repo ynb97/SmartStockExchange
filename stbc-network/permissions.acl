@@ -1,0 +1,124 @@
+/**
+ * Access control rules for stock exchange network
+ */
+
+rule OwnerCompanyShareIssue {
+  description: "Only the owner of a company should be able to update the company through ShareIssue transaction"
+  participant(p): "org.yky.stbc.Trader"
+  operation: UPDATE
+  resource(c): "org.yky.stbc.Company"
+  transaction: "org.yky.stbc.ShareIssue"
+  condition: (c.owner.getIdentifier() == p.getIdentifier())
+  action: ALLOW
+}
+
+rule OwnerShareShareIssue {
+  description: "Only the owner of a company should be able to issue share of the company through ShareIssue transaction"
+  participant: "org.yky.stbc.Trader"
+  operation: CREATE
+  resource: "org.yky.stbc.Share"
+  transaction: "org.yky.stbc.ShareIssue"
+  action: ALLOW
+}
+
+rule OwnerSharePlaceOrder {
+  description: "Trader should be able to create, edit and delete share entry through PlaceOrder transaction"
+  participant: "org.yky.stbc.Trader"
+  operation: ALL
+  resource: "org.yky.stbc.Share"
+  transaction: "org.yky.stbc.PlaceOrder"
+  action: ALLOW
+}
+
+
+rule TraderShareIssue {
+  description: "Trader should have access to share issue transction"
+  participant: "org.yky.stbc.Trader"
+  operation: CREATE
+  resource: "org.yky.stbc.ShareIssue"
+  action: ALLOW
+}
+
+rule TraderSharePlaceOrder {
+  description: "Trader should be able to change ownership of share through PlaceOrder transaction"
+  participant: "org.yky.stbc.Trader"
+  operation: READ, UPDATE
+  resource: "org.yky.stbc.Share"
+  transaction: "org.yky.stbc.PlaceOrder"
+  action: ALLOW
+}
+
+rule TraderOrderPlaceOrder {
+  description: "Trader should have all operation access on Order through PlaceOrder transaction"
+  participant: "org.yky.stbc.Trader"
+  operation: ALL
+  resource: "org.yky.stbc.Order"
+  transaction: "org.yky.stbc.PlaceOrder"
+  action: ALLOW
+}
+
+rule TraderOrder {
+  description: "All traders should have access to Order transaction"
+  participant: "org.yky.stbc.Trader"
+  operation: CREATE
+  resource: "org.yky.stbc.PlaceOrder"
+  action: ALLOW
+}
+
+rule TraderTraderOrder {
+  description: "Trader should be able to update other traders balance through Order settlement"
+  participant: "org.yky.stbc.Trader"
+  operation: UPDATE
+  resource: "org.yky.stbc.Trader"
+  transaction: "org.yky.stbc.PlaceOrder"
+  action: ALLOW
+}
+
+rule TraderTradeOrder {
+  description: "Trader should be able to create trade records only through Order settlement"
+  participant: "org.yky.stbc.Trader"
+  operation: CREATE
+  resource: "org.yky.stbc.Trade"
+  transaction: "org.yky.stbc.PlaceOrder"
+  action: ALLOW
+}
+
+rule ViewAccessForParticipant {
+  description: "Participnt should have read access to all resources"
+  participant: "org.yky.stbc.Trader"
+  operation: READ
+  resource: "org.yky.stbc.**"
+  action: ALLOW
+}
+
+rule NetworkAdminUserCompanyACL {
+  description: "Allow network admin full access on company participant"
+  participant: "org.hyperledger.composer.system.NetworkAdmin"
+  operation: ALL
+  resource: "org.yky.stbc.Company"
+  action: ALLOW
+}
+
+rule NetworkAdminUserTraderACL {
+  description: "Allow network admin full access on company participant"
+  participant: "org.hyperledger.composer.system.NetworkAdmin"
+  operation: ALL
+  resource: "org.yky.stbc.Trader"
+  action: ALLOW
+}
+
+rule SystemACL {
+  description:  "System ACL to permit all access"
+  participant: "ANY"
+  operation: ALL
+  resource: "org.hyperledger.composer.system.**"
+  action: ALLOW
+}
+
+// rule NetworkAdminSystem {
+//   description: "Allow network admin to access all system resources"
+//   participant: "org.hyperledger.composer.system.NetworkAdmin"
+//   operation: ALL
+//   resource: "org.hyperledger.composer.system.**"
+//   action: ALLOW
+// }

@@ -1,0 +1,30 @@
+query selectSaleOrderOfCompany {
+  description: "select sale Orders of specific company's share"
+  statement:
+      SELECT org.yky.stbc.Order
+        WHERE (company == _$company AND type == 'FOR_SALE' AND price <= _$price)
+        
+}
+
+query selectShareByUserAndCompanyLimit {
+  description: "select the shares os specific company belonging to specific user"
+  statement:
+      SELECT org.yky.stbc.Share
+        WHERE (holder == _$owner AND company == _$company)
+        LIMIT _$limit
+}
+
+query selectShareByUserAndCompany {
+  description: "select the shares os specific company belonging to specific user"
+  statement:
+      SELECT org.yky.stbc.Share
+        WHERE (holder == _$owner AND company == _$company)
+}
+
+query selectBuyOrderOfCompany {
+  description: "select buy Orders of specific company's share"
+  statement:
+      SELECT org.yky.stbc.Order
+        WHERE (company == _$company AND type == 'FOR_BUY' AND price >= _$price)
+        
+}

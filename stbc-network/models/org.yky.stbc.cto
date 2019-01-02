@@ -1,0 +1,70 @@
+/**
+ * Write your model definitions here
+ */
+
+namespace org.yky.stbc
+
+asset Share identified by shareId {
+  o String shareId
+  o Integer count
+  --> Company company
+  --> Trader holder //fixme : holder can be the company or trader;
+}
+
+asset Order identified by OrderId {
+  o String OrderId
+  o OrderType type
+  o Integer count
+  o Double price
+  --> Company company
+  --> Trader trader//Trader can be obtained by getCurrentParticipant()
+}
+
+asset Trade identified by tradeId {
+  o String tradeId
+  o Integer count
+  o Double price
+  --> Trader buyer
+  --> Trader seller
+  --> Company company
+}
+
+abstract participant User identified by email {
+  o String email
+  o String name
+}
+
+participant Trader extends User {
+  o Double balance
+}
+
+participant Company extends User{
+  o Integer issuedShareCount
+  --> Trader owner  
+}
+
+enum OrderType {
+  o FOR_SALE
+  o FOR_BUY
+}
+
+transaction ShareIssue {
+  o String detail
+  o Integer count
+  o Double price
+  --> Company company
+}
+
+transaction PlaceOrder {
+  o OrderType OrderType
+  o Integer count
+  o Double price
+  --> Company company
+}
+
+transaction ModifyOrder {
+  o Double newPrice
+  --> Order Order //fix : will be better to replace with PlaceOrder transaction id or Order id.
+}
+
+//todo : Order time out has to be implemented
