@@ -26,6 +26,9 @@ app.listen(8080, () => console.log('Example app listening on port 8080!'))
 
 app.get("/", function (req, res) {
   res.render("home");
+  client.get("http://localhost:3000/api/org.yky.stbc.Company", function(data, response) {
+console.log(data);
+});
 });
 
 
