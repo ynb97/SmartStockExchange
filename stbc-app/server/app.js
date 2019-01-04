@@ -24,12 +24,16 @@ app.use(function(req, res, next) {
 
 app.listen(8080, () => console.log('Example app listening on port 8080!'))
 
-
 app.get("/", function (req, res) {
+  res.render("home");
+});
+
+
+app.get("/company", function (req, res) {
   res.render("company");
 });
 
-app.post("/",function(req, res){
+app.post("/company",function(req, res){
   var args = {
     data: {
       "$class": "org.yky.stbc.Company",
@@ -47,4 +51,5 @@ app.post("/",function(req, res){
 client.post("http://localhost:3000/api/org.yky.stbc.Company", args, function(data, response) {
     res.json(data);
 });
+res.redirect("/"); 
 });
