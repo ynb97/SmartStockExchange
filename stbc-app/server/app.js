@@ -22,13 +22,10 @@ app.use(function(req, res, next) {
 });
 
 
-app.listen(8080, () => console.log('Example app listening on port 8080!'))
+app.listen(8081, () => console.log('Example app listening on port 8080!'))
 
 app.get("/", function (req, res) {
   res.render("home");
-  client.get("http://localhost:3000/api/org.yky.stbc.Company", function(data, response) {
-console.log(data);
-});
 });
 
 
@@ -50,9 +47,105 @@ app.post("/company",function(req, res){
       "Accept":"application/json"
     }
 }
-
 client.post("http://localhost:3000/api/org.yky.stbc.Company", args, function(data, response) {
     res.json(data);
 });
-res.redirect("/"); 
 });
+
+app.get("/createshare", function (req, res) {
+  res.render("createshare");
+});
+
+app.post("/createshare",function(req, res){
+
+  console.log(req.body);
+  var args = {
+    data: {
+      "$class": "org.yky.stbc.ShareIssue",
+      "trader":req.body.trader,
+      "detail": req.body.detail,
+      "count": req.body.count,
+      "price":req.body.price,
+      "company": "resource:org.yky.stbc.Company#"+req.body.company,
+    },
+    headers: {
+      "Content-Type": "application/json",
+      "Accept":"application/json"
+    }
+}
+console.log(args);
+
+client.post("http://localhost:3000/api/org.yky.stbc.ShareIssue", args, function(data, response) {
+    res.json(data);
+});
+});
+
+
+app.get("/placeorder", function (req, res) {
+  res.render("placeorder");
+});
+
+app.post("/placeorder",function(req, res){
+  var args = {
+    data: {
+      "$class": "org.yky.stbc.PlaceOrder",
+      "OrderType": req.body.OrderType,
+      "count": req.body.count,
+      "price":req.body.price,
+      "company": "resource:org.yky.stbc.Company#"+req.body.company,
+    },
+    headers: {
+      "Content-Type": "application/json",
+      "Accept":"application/json"
+    }
+}
+client.post("http://localhost:3000/api/org.yky.stbc.PlaceOrder", args, function(data, response) {
+    res.json(data);
+});
+});
+
+
+app.get("/modifyorder", function (req, res) {
+  res.render("modifyorder");
+});
+
+app.post("/modifyorder",function(req, res){
+  var args = {
+    data: {
+      "$class": "org.yky.stbc.ModifyOrder",
+      "newPrice": req.body.newPrice,
+      "company": "resource:org.yky.stbc.Order#"+req.body.Order,
+    },
+    headers: {
+      "Content-Type": "application/json",
+      "Accept":"application/json"
+    }
+}
+client.post("http://localhost:3000/api/org.yky.stbc.ModifyOrder", args, function(data, response) {
+    res.json(data);
+});
+});
+
+
+app.get("/trader", function (req, res) {
+  res.render("trader");
+});
+
+app.post("/trader",function(req, res){
+  var args = {
+    data: {
+      "$class": "org.yky.stbc.Trader",
+      "balance": req.body.balance,
+      "email": req.body.email,
+      "name": "resource:org.yky.stbc.Order#"+req.body.name,
+    },
+    headers: {
+      "Content-Type": "application/json",
+      "Accept":"application/json"
+    }
+}
+client.post("http://localhost:3000/api/org.yky.stbc.Trader", args, function(data, response) {
+    res.json(data);
+});
+});
+

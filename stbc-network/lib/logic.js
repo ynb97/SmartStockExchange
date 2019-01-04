@@ -4,6 +4,7 @@
  * @param {org.yky.stbc.ShareIssue} shareIssue
  * @transaction
  */
+
 function onShareIssue(shareIssue) {
     var trader = getCurrentParticipant()
     return getParticipantRegistry('org.yky.stbc.Company')
@@ -18,6 +19,7 @@ function onShareIssue(shareIssue) {
                 });
         })
 }
+
 
 /**
  * Transaction Order for buy or sell
