@@ -21,4 +21,11 @@ app.use(function(req, res, next) {
 });
 
 
-app.listen(8080, () => console.log('Example app listening on port 8080!'))
+app.get("/", function (req, res) {
+    // res.send("Landing page");
+    res.render("landing");
+});
+
+// app.post("");
+
+app.listen(8081, () => console.log('Example app listening on port 8080!'))
