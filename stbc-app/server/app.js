@@ -4,6 +4,7 @@
 const _ = require("underscore");
 const express = require('express');
 const app = express();
+app.set("view engine", "ejs");
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
@@ -21,11 +22,29 @@ app.use(function(req, res, next) {
 });
 
 
+app.listen(8080, () => console.log('Example app listening on port 8080!'))
+
+
 app.get("/", function (req, res) {
-    // res.send("Landing page");
-    res.render("landing");
+  res.render("company");
 });
 
-// app.post("");
+app.post("/",function(req, res){
+  var args = {
+    data: {
+      "$class": "org.yky.stbc.Company",
+      "issuedShareCount": req.body.issuedShareCount,
+      "owner": "resource:org.yky.stbc.Trader#"+req.body.owner,
+      "email": req.body.email,
+      "name":req.body.name
+    },
+    headers: {
+      "Content-Type": "application/json",
+      "Accept":"application/json"
+    }
+}
 
-app.listen(8081, () => console.log('Example app listening on port 8080!'))
+client.post("http://localhost:3000/api/org.yky.stbc.Company", args, function(data, response) {
+    res.json(data);
+});
+});
