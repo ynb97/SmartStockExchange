@@ -1,4 +1,3 @@
-*.sh
 .ssh-*
 node_modules/
 composer

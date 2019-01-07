@@ -3,7 +3,7 @@
     "composer": "^0.19.19"
   },
   "name": "stbc-network",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Smart stock exchange network",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/stbc-network.bna",

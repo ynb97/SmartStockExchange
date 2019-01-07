@@ -1,0 +1,8 @@
+composer network install --card PeerAdmin@hlfv1 --archiveFile stbc-network@0.0.4.bna
+
+composer network start --networkName stbc-network --networkVersion 0.0.4 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
+
+composer card import --file networkadmin.card
+
+  composer identity issue -c admin@stbc-network -f yash@abc.card -u yash@abc -a "resource:org.yky.stbc.Company#yash@abc"
+
