@@ -137,15 +137,42 @@ app.post("/trader",function(req, res){
       "$class": "org.yky.stbc.Trader",
       "balance": req.body.balance,
       "email": req.body.email,
-      "name": "resource:org.yky.stbc.Order#"+req.body.name,
+      "name": req.body.name,
     },
     headers: {
       "Content-Type": "application/json",
       "Accept":"application/json"
     }
 }
-client.post("http://localhost:3000/api/org.yky.stbc.Trader", args, function(data, response) {
+client.post("http://localhost:3001/api/org.yky.stbc.Trader", args, function(data, response) {
     res.json(data);
 });
 });
 
+/*
+   get all the participant:trader from the rest server 
+*/
+app.get("/traderview", function (req, res) {
+
+  client.get("http://localhost:3001/api/org.yky.stbc.Trader", function (data, response) {
+    res.render("traderview", {data:data});
+});
+});
+/*
+   get all the participant:comapny from the rest server 
+*/
+app.get("/companyview", function (req, res) {
+
+  client.get("http://localhost:3001/api/org.yky.stbc.Company", function (data, response) {
+  res.render("companyview", {data:data});
+});
+});
+/*
+   get all the buy order from the rest server 
+*/
+app.get("/buyorderview", function (req, res) {
+
+  client.get("http://localhost:3001/api/org.yky.stbc.Company", function (data, response) {
+  res.render("buyorderview", {data:data});
+});
+});

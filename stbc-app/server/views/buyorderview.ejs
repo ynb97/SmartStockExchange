@@ -1,0 +1,41 @@
+<% include partials/header %>
+
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">number</th>
+        <th scope="col"> OrderType </th>
+        <th scope="col">count </th>
+        <th scope="col">price</th>
+        <th scope="col">company</th>
+        <th scope="col">trader</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+            <% data.forEach(function(data){ %>
+                <tr>
+                    <td>
+                        #
+                    </td>
+                <td>
+                        <%= data.OrderType%>
+                </td>
+                <td>
+                        <%= data.count%>
+                </td>
+               
+                <td>
+                        <%= data.price%>
+                </td>
+                <td>
+                        <%= data.company%>
+                </td>
+                <td>
+                    <%= data.trader%>
+                </td>
+            </tr>
+                <% }); %>
+    
+  </table>
+  <% include partials/footer %>
