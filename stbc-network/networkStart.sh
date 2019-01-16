@@ -8,4 +8,3 @@ composer network start --networkName $1 --networkVersion $3 --networkAdmin admin
 composer card import --file networkadmin.card
 
 composer network ping -c $2@$1
-# 

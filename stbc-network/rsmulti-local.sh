@@ -31,4 +31,12 @@ export COMPOSER_DATASOURCES='{
 
 
 # Execute the script for enabling authentication
-./rsauth.sh
+if [ $1 == "github" ]
+then
+    ./rsauth-github.sh
+elif [ $1 == "google" ]
+then
+    ./rsauth-google.sh
+else
+    echo "Please enter a valid authentication scheme!"
+fi
