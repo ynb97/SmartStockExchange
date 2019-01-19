@@ -50,6 +50,13 @@ function getCookie(cname, resp) {
 }
 
 
+var ID = function () {
+  // Math.random should be unique because of its seeding algorithm.
+  // Convert it to base 36 (numbers + letters), and grab the first 9 characters
+  // after the decimal.
+  return '_' + Math.random().toString(36).substr(2, 12);
+};
+
 app.get("/", function (req, res) {
   res.render("home");
 });
@@ -60,6 +67,9 @@ app.get("/githublogin", function(req, res){
   res.redirect("http://localhost:3000/auth/github");
   act = getCookie('access_token', req);
   act = act.substr(2, 64);
+  // console.log("Login by github");
+  // console.log(req.cookies);
+  // console.log(req.cookies['access_token']);
 });
 
 app.get("/googlelogin", function(req, res){
@@ -69,10 +79,16 @@ app.get("/googlelogin", function(req, res){
 act = getCookie('access_token',req);
 act = act.substr(2,64);
   // console.log(act.substr(2,64));
-  // console.log(req.cookies);
-  
+  // console.log(req.headers['cookie']);
+
+  // console.log(req.cookies['access_token']);
+  console.log(act);
 });
 
+app.get("/getatoken", function(req, res){
+  res.redirect('/');
+  // console.log(act);
+});
 
 app.get("/company", function (req, res) {
   res.render("company");
@@ -94,7 +110,7 @@ app.post("/company",function(req, res){
     }
   }
   client.post("http://localhost:3000/api/org.yky.stbc.Company", args, function(data, response) {
-    res.json(data);
+    // res.json(data);
   });
 });
 
@@ -120,10 +136,10 @@ app.post("/createshare",function(req, res){
       "X-Access-Token": act
     }
   }
-  console.log(args);
+  // console.log(args);
   
   client.post("http://localhost:3000/api/org.yky.stbc.ShareIssue", args, function(data, response) {
-    res.json(data);
+    res.redirect("/");
 });
 });
 
@@ -148,7 +164,7 @@ app.post("/placeorder",function(req, res){
     }
   }
 client.post("http://localhost:3000/api/org.yky.stbc.PlaceOrder", args, function(data, response) {
-  res.json(data);
+  // res.json(data);
 });
 });
 
@@ -171,7 +187,7 @@ app.post("/modifyorder",function(req, res){
     }
   }
   client.post("http://localhost:3000/api/org.yky.stbc.ModifyOrder", args, function(data, response) {
-    res.json(data);
+    // res.json(data);
 });
 });
 
@@ -181,9 +197,11 @@ app.get("/trader", function (req, res) {
 });
 
 app.post("/trader",function(req, res){
+  var newTrader = ID();
   var args = {
     data: {
       "$class": "org.yky.stbc.Trader",
+      // "traderId": newTrader,
       "balance": req.body.balance,
       "email": req.body.email,
       "name": req.body.name,
@@ -194,8 +212,8 @@ app.post("/trader",function(req, res){
       "X-Access-Token": act
     }
   }
-  client.post("http://localhost:3001/api/org.yky.stbc.Trader", args, function(data, response) {
-    res.json(data);
+  client.post("http://localhost:3000/api/org.yky.stbc.Trader", args, function(data, response) {
+    // res.json(data);
   });
 });
 
@@ -204,7 +222,7 @@ get all the participant:trader from the rest server
 */
 app.get("/traderview", function (req, res) {
   
-  client.get("http://localhost:3001/api/org.yky.stbc.Trader", function (data, response) {
+  client.get("http://localhost:3000/api/org.yky.stbc.Trader", function (data, response) {
     res.render("traderview", {data:data});
   });
 });
@@ -213,7 +231,7 @@ get all the participant:comapny from the rest server
 */
 app.get("/companyview", function (req, res) {
   
-  client.get("http://localhost:3001/api/org.yky.stbc.Company", function (data, response) {
+  client.get("http://localhost:3000/api/org.yky.stbc.Company", function (data, response) {
     res.render("companyview", {data:data});
   });
 });
@@ -222,7 +240,7 @@ get all the buy order from the rest server
 */
 app.get("/buyorderview", function (req, res) {
   
-  client.get("http://localhost:3001/api/org.yky.stbc.Company", function (data, response) {
+  client.get("http://localhost:3000/api/org.yky.stbc.PlaceOrder", function (data, response) {
     res.render("buyorderview", {data:data});
   });
 });

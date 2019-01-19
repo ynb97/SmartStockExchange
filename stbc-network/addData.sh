@@ -17,13 +17,7 @@ composer participant add -d '{"$class": "org.yky.stbc.Trader","balance": 50000,"
 # <!-- Transaction ShareIssue -->
 elif [ $1 == "si" ]
 then
-'{
-  "$class": "org.yky.stbc.ShareIssue",
-  "detail": "First Share Issue of ABC",
-  "count": 3,
-  "price": 10,
-  "company": "resource:org.yky.stbc.Company#company@abc.com"
-},
+composer '{"$class": "org.yky.stbc.ShareIssue","detail": "First Share Issue of ABC","count": 3,"price": 10,"company": "resource:org.yky.stbc.Company#company@abc.com"},
 
 {
   "$class": "org.yky.stbc.ShareIssue",
