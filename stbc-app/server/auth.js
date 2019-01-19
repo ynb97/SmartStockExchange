@@ -10,8 +10,8 @@ module.exports = (passport) => {
     });
 
     passport.use(new GoogleStrategy({
-            clientID: "276663469810-2rn481blntu7sb6nnsqn252bjsulq23r.apps.googleusercontent.com",
-            clientSecret:"XDkPsSkNKKIU0kQC9ColXR_c",
+            clientID: "449924219156-jfirj3m00j10bsk3s76va5o0os3j7mvu.apps.googleusercontent.com",
+            clientSecret:"YpYqdTsltUXtMTGDVnFVaIN_",
             callbackURL: "/login/google/callback",
             passReqToCallback   : true
         },

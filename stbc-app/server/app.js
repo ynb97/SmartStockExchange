@@ -256,7 +256,7 @@ app.get('/login/google/callback',
   }
   console.log(args);
   client.post("http://localhost:3001/api/org.yky.stbc.Trader", args, function(data, response) {
-    res.json(data);
+    // res.json(data);
   });
   res.redirect("/");
   }
