@@ -5,12 +5,17 @@ const _ = require("underscore");
 const express = require('express');
 const app = express();
 app.set("view engine", "ejs");
-// var http = require('http-client');
-// var cookieParser = require('cookie-parser');
-// app.use(cookieParser());
+
+/*
+to import auth.js file in app.js 
+*/
+passport = require('passport'),
+auth = require('./auth');
+auth(passport);
+app.use(passport.initialize());
+
 let act = 0;
-// var tokn;
-// var Http = new http();
+
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
@@ -44,83 +49,20 @@ function getCookie(cname, resp) {
   return "";
 }
 
-// declare
-// var gapi;
-// // var googleUser;
-// var auth2;
-// var clientId = '1088454258427-cvetgr7voh31f323krt8fha7rpbs1vd3.apps.googleusercontent.com';
-// var scope = [
-//   'https://www.googleapis.com/auth/plus.login'
-// ].join(' ');
-
-
-// // var googleInit() {
-// //   if (gapi) {
-//     gapi.load('auth2', () => {
-//       this.auth2 = gapi.auth2.init({
-//         client_id: this.clientId,
-//         scope: this.scope
-//       });
-//       this.attachSignin(document.getElementById('googleLogin'));
-//       this.init();
-//     });
-//   } else {
-//     setTimeout(() => {
-//       this.googleInit();
-//     }, 500);
-//   }
-// }
-
-// public attachSignin(element) {
-  // this.auth2.attachClickHandler(element, {},
-  //   (googleUser) => {
-  //     let profile = googleUser.getBasicProfile();
-  //     console.log('Token || ' + googleUser.getAuthResponse().id_token);
-  //     console.log('ID: ' + profile.getId());
-  //     // ...
-  //   },
-  //   function (error) {
-  //     console.log(JSON.stringify(error, undefined, 2));
-  //   });
-// }
-
-// init() {
-//   this.auth2.isSignedIn.listen(this.signinChanged);
-//   this.auth2.currentUser.listen(this.userChanged);
-//   this.refreshValues();
-// };
-
-// signinChanged = (val) => {
-//   console.log('google ### signinChanged', val);
-// }
-// /**
-//  * Listener method for when the user changes.
-//  *
-//  * @param {GoogleUser} user the updated user.
-//  */
-// userChanged = (user) => {
-//   console.log('google ### User now: ', user);
-//   this.googleUser = user;
-//   this.updateGoogleUser();
-// };
-
 
 app.get("/", function (req, res) {
   res.render("home");
 });
 
 
+
 app.get("/githublogin", function(req, res){
   res.redirect("http://localhost:3000/auth/github");
   act = getCookie('access_token', req);
   act = act.substr(2, 64);
-  console.log("Login by github");
-  console.log(req.cookies);
-  console.log(req.cookies['access_token']);
 });
 
 app.get("/googlelogin", function(req, res){
-
     res.redirect("http://localhost:3000/auth/google");
 
   
@@ -128,13 +70,9 @@ act = getCookie('access_token',req);
 act = act.substr(2,64);
   // console.log(act.substr(2,64));
   // console.log(req.cookies);
-  console.log(req.cookies['access_token']);
+  
 });
 
-app.get("/getatoken", function(req, res){
-  res.redirect('/');
-  console.log(act);
-});
 
 app.get("/company", function (req, res) {
   res.render("company");
@@ -288,6 +226,42 @@ app.get("/buyorderview", function (req, res) {
     res.render("buyorderview", {data:data});
   });
 });
+/*
+google authentication for normal account 
+*/
+app.get('/login/google', passport.authenticate('google', {
+  scope: [ 'https://www.googleapis.com/auth/plus.login',
+  'https://www.googleapis.com/auth/plus.profile.emails.read' ]
+}));
+
+app.get('/login/google/callback',
+  passport.authenticate('google', {
+      failureRedirect: '/'
+  }),
+  (req, res) => {
+  
+
+  var args = {
+    data: {
+      "$class": "org.yky.stbc.Trader",
+      "balance": 0,
+      "email": req.user.emails[0]['value'],
+      "name": req.user['displayName'],
+    },
+    headers: {
+      "Content-Type": "application/json",
+      "Accept":"application/json",
+      "X-Access-Token": act
+    }
+  }
+  console.log(args);
+  client.post("http://localhost:3001/api/org.yky.stbc.Trader", args, function(data, response) {
+    res.json(data);
+  });
+  res.redirect("/");
+  }
+  
+);
 
 
 app.listen(8081, () => console.log('Example app listening on port 8081!'))
