@@ -15,7 +15,7 @@ auth(passport);
 app.use(passport.initialize());
 
 let act = 0;
-
+let username ;
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
@@ -72,18 +72,65 @@ app.get("/githublogin", function(req, res){
   // console.log(req.cookies['access_token']);
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.get("/googlelogin", function(req, res){
     res.redirect("http://localhost:3000/auth/google");
 
   
 act = getCookie('access_token',req);
 act = act.substr(2,64);
-  // console.log(act.substr(2,64));
-  // console.log(req.headers['cookie']);
 
-  // console.log(req.cookies['access_token']);
-  console.log(act);
+  var args = {
+    data: {
+      participant: "org.yky.stbc.Trader#"+username,
+      userID: username,
+      options: {}
+    },
+    headers: {
+      "Content-Type": "application/json",
+      "Accept":"application/octet-stream",
+      "X-Access-Token": act
+      }
+  }
+  client.post("http://localhost:3001/api/system/identities/issue ", args, function(data, response) {
+    console.log(response);
+  });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.get("/getatoken", function(req, res){
   res.redirect('/');
@@ -113,6 +160,18 @@ app.post("/company",function(req, res){
     // res.json(data);
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.get("/createshare", function (req, res) {
   res.render("createshare");
@@ -222,7 +281,7 @@ get all the participant:trader from the rest server
 */
 app.get("/traderview", function (req, res) {
   
-  client.get("http://localhost:3000/api/org.yky.stbc.Trader", function (data, response) {
+  client.get("http://localhost:3001/api/org.yky.stbc.Trader", function (data, response) {
     res.render("traderview", {data:data});
   });
 });
@@ -257,7 +316,7 @@ app.get('/login/google/callback',
       failureRedirect: '/'
   }),
   (req, res) => {
-  
+  username=req.user.emails[0]['value'];
 
   var args = {
     data: {
@@ -272,7 +331,6 @@ app.get('/login/google/callback',
       "X-Access-Token": act
     }
   }
-  console.log(args);
   client.post("http://localhost:3001/api/org.yky.stbc.Trader", args, function(data, response) {
     // res.json(data);
   });
