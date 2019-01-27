@@ -4,6 +4,8 @@
 const _ = require("underscore");
 const express = require('express');
 const app = express();
+const fs = require('fs');
+const FormData = require('form-data');
 app.set("view engine", "ejs");
 
 /*
@@ -88,6 +90,7 @@ app.get("/githublogin", function(req, res){
 
 
 app.get("/googlelogin", function(req, res){
+
     res.redirect("http://localhost:3000/auth/google");
 
   
@@ -103,11 +106,37 @@ act = act.substr(2,64);
     headers: {
       "Content-Type": "application/json",
       "Accept":"application/octet-stream",
-      "X-Access-Token": act
+      "X-Access-Token": act,
+      "responseType": "blob"
       }
   }
-  client.post("http://localhost:3001/api/system/identities/issue ", args, function(data, response) {
-    console.log(response);
+  
+  client.post("http://localhost:3001/api/system/identities/issue", args, function(data, response) {
+
+  console.log(JSON.stringify(data))
+    const cardData=JSON.stringify(data);
+  
+   var file= fs.writeFileSync(`myCard.card`, data)
+
+    const formData = new FormData();
+    
+    formData.append(file,'card');
+
+    var args = {
+    
+    formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Accept":"application/json",
+        "X-Access-Token": act
+      }
+    }
+   
+    client.post("http://localhost:3000/api/wallet/import", args, function(data, response) {
+     
+    });
+
+
   });
 });
 
@@ -198,7 +227,8 @@ app.post("/createshare",function(req, res){
   // console.log(args);
   
   client.post("http://localhost:3000/api/org.yky.stbc.ShareIssue", args, function(data, response) {
-    res.redirect("/");
+    // res.redirect("/");
+    res.json(data);
 });
 });
 
@@ -290,7 +320,7 @@ get all the participant:comapny from the rest server
 */
 app.get("/companyview", function (req, res) {
   
-  client.get("http://localhost:3000/api/org.yky.stbc.Company", function (data, response) {
+  client.get("http://localhost:3001/api/org.yky.stbc.Company", function (data, response) {
     res.render("companyview", {data:data});
   });
 });
@@ -299,7 +329,7 @@ get all the buy order from the rest server
 */
 app.get("/buyorderview", function (req, res) {
   
-  client.get("http://localhost:3000/api/org.yky.stbc.PlaceOrder", function (data, response) {
+  client.get("http://localhost:3001/api/org.yky.stbc.PlaceOrder", function (data, response) {
     res.render("buyorderview", {data:data});
   });
 });
