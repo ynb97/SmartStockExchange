@@ -11,4 +11,4 @@ composer card import --file networkadmin.card
 
 composer network ping -c $2@$1
 
-composer-rest-server -c admin@stbc-network -p 3001
+composer-rest-server -c $2@$1 -p 3001
