@@ -3,8 +3,37 @@
 /*********************************************************************/
 const _ = require("underscore");
 const express = require('express');
+const path = require('path');
 const app = express();
 const fs = require('fs');
+const CardImport = require('composer-cli').Card.Import;
+const BusinessNetworkCardStore = require('composer-common').BusinessNetworkCardStore;
+let Card = {};
+var cdata;
+var exec = require('child_process').exec, isid;
+
+const AdminConnection = require('composer-admin').AdminConnection;
+// const fs = require('fs');
+const IdCard = require('composer-common').IdCard;
+const LoopBackCardStore = require('./loopbackcardstore');
+// const Util = require('./util');
+
+// const AdminConnection = require('composer-admin').AdminConnection;
+// const BusinessNetworkConnection = require('composer-client').BusinessNetworkConnection;
+// const BusinessNetworkDefinition = require('composer-common').BusinessNetworkDefinition;
+// const FileSystemCardStore = require('composer-common').FileSystemCardStore;
+// const BusinessNetworkCardStore = require('composer-common').BusinessNetworkCardStore;
+// const IdCard = require('composer-common').IdCard;
+
+// this.bizNetworkConnection = new BusinessNetworkConnection();
+
+// const fileSystemCardStore = new FileSystemCardStore();
+// const businessNetworkConnection = new BusinessNetworkConnection();
+// const adminConnection = new AdminConnection();
+// const businessNetworkCardStore = new BusinessNetworkCardStore();
+
+
+// const FormData = require('multi-part');
 const FormData = require('form-data');
 app.set("view engine", "ejs");
 
@@ -18,6 +47,7 @@ app.use(passport.initialize());
 
 let act = 0;
 let username ;
+let fiile;
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
@@ -33,6 +63,45 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+
+// Add a remote method for importing a card.
+var importCard = ( name, accessToken) => {
+  const userId = accessToken.userId;
+  const cardStore = new LoopBackCardStore(Card, userId);
+
+    return new Promise((resolve, reject) => {
+      fs.readFile('myCard.card', (err, data) => {
+        if (err) {
+          console.log("Err..."+err);
+          return reject(err);
+        }
+        console.log("Data..."+data);
+        resolve(data);
+      });
+    }).then((cardData) => {
+    return IdCard.fromArchive(cardData);
+  }).then((card) => {
+    if (!name) {
+      const locationName = card.getBusinessNetworkName() || card.getConnectionProfile().name;
+      name = card.getUserName() + '@' + locationName;
+    }
+    // Put the card into the card store.
+    console.log("Name..."+name+"   Card..."+card);
+    return cardStore.put(name, card);
+  }).then((card) => {
+    // Then we import the card into the card store using the admin connection.
+    // This imports the credentials from the card into the LoopBack wallet.
+    const adminConnection = new AdminConnection({ cardStore });
+    return adminConnection.importCard(name, card);
+  }).then(() => {
+    return getDefaultCard(userId);
+  }).then((defaultCard) => {
+    if (!defaultCard) {
+      return setDefaultCard(userId, name);
+    }
+  });
+};
 
 
 function getCookie(cname, resp) {
@@ -110,36 +179,147 @@ act = act.substr(2,64);
       "responseType": "blob"
       }
   }
+  // var cdata;
   
   client.post("http://localhost:3001/api/system/identities/issue", args, function(data, response) {
 
-  console.log(JSON.stringify(data))
-    const cardData=JSON.stringify(data);
+  cdata = data;
+
+  // console.log(JSON.stringify(data))
+    // const cardData=JSON.stringify(data);
   
-   var file= fs.writeFileSync(`myCard.card`, data)
+   fs.writeFileSync(`myCard.card`, data);
+// console.log(file);
+    // let options = {
+    //   file: 'myCard.card',
+    //   card: username + '@stbc-network'
+    // };
 
-    const formData = new FormData();
+    // CardImport.handler(options);
     
-    formData.append(file,'card');
-
-    var args = {
-    
-    formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        "Accept":"application/json",
-        "X-Access-Token": act
-      }
-    }
    
-    client.post("http://localhost:3000/api/wallet/import", args, function(data, response) {
-     
-    });
+    console.log(act);
 
 
   });
+  // const mfile = fs.readFileSync('myCard.card', { type: 'application/octet-stream', lastModified: Date.now() });
+
+//   const formData = new FormData();
+
+//   formData.append('card', fs);
+
+
+//   var args1 = {
+
+//     cdata,
+//     headers: {
+//       "Content-Type": "multipart/form-data",
+//       "Accept": "application/json",
+//       "X-Access-Token": act
+//     }
+//   }
+// // console.log(args1);
+//   client.post("http://localhost:3000/api/wallet/import?name="+username,args1, function(data, response) {
+// console.log(response);
+//   });
+// isid();
+  
+
+  
+  
 });
 
+app.get("/setdef", function(){
+
+  var cmmd = "curl -X POST --header 'Content-Type: multipart/form-data' --header 'Accept: application/json' --header 'X-Access-Token: " + act + "' {'type':'formData'} 'http://localhost:3000/api/wallet/import?name=" + username + "'";
+  var cmmd2 = "curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'X-Access-Token: " + act + "' 'http://localhost:3000/api/wallet/" + username + "/setDefault'";
+  console.log(cmmd);
+  exec(cmmd,
+    function (error, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
+
+  exec(cmmd2,
+    function (error, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
+});
+
+app.get("/import", function(data,res){
+  var formData = new FormData();
+
+  var card = new Promise((resolve, reject) => {
+    fs.readFile('myCard.card', (err, data) => {
+      if (err) {
+        // console.log("Err..." + err);
+        return reject(err);
+      }
+      console.log("Data..." + data);
+      resolve(data);
+    })
+    }).then(() =>{
+      formData.append('card', data);
+    });
+  // console.log("card....."+card);
+// var cardStore = new BusinessNetworkCardStore();
+//   const adminConnection = new AdminConnection({ cardStore });
+//   return adminConnection.importCard(username, card);
+
+  // importCard(username, act);
+
+  // let options = {
+  //   file: 'myCard.card',
+  //   card: username + '@stbc-network'
+  // };
+
+  // CardImport.handler(options);
+//   file1 = fs.createReadStream('myCard.card');
+//   // var filePath = path.join(__dirname, 'myCard.card');
+//   // var file = fs.readFile(filePath, { encoding: 'utf-8' }, function (err, data) {
+//   //   if (!err) {
+//   //     console.log('received data: ' + data);
+      
+//   //   } else {
+//   //     console.log(err);
+//   //   }
+//   // });
+  
+// //   formData.append(username, 'name');
+console.log(formData);
+
+  var args1 = {
+
+    formData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      "Accept": "application/json",
+      "X-Access-Token": act
+    }
+  }
+
+//   var args1 = {
+//     formData: {
+//       "card": './myCard.card'
+//     },
+//     hesdaaders: {
+//       "Content-Type": "multipart/form-data",
+//       "Accept": "application/json",
+//       "X-Access-Token": act
+//     }
+//   }
+console.log("act..."+act);
+  client.post("http://localhost:3000/api/wallet/import?name="+username, args1, function (data, response) {
+// console.log(response);
+  });
+});
 
 
 

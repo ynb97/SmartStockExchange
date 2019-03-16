@@ -1,0 +1,212 @@
+================================================================================
+==== Node Report ===============================================================
+
+Event: exception, location: "OnUncaughtException"
+Filename: node-report.20190216.152020.10179.001.txt
+Dump event time:  2019/02/16 15:20:20
+Module load time: 2019/02/16 15:19:35
+Process ID: 10179
+Command line: node app.js 
+
+Node.js version: v8.14.0
+(http_parser: 2.8.0, v8: 6.2.414.72, uv: 1.23.2, zlib: 1.2.11, ares: 1.10.1-DEV,
+ modules: 57, nghttp2: 1.33.0, napi: 3, openssl: 1.0.2q, icu: 60.1, unicode: 10.0,
+ cldr: 32.0, tz: 2017c)
+
+node-report version: 2.2.1 (built against Node.js v8.14.0, glibc 2.27, 64 bit)
+
+OS version: Linux 4.15.0-45-generic #48-Ubuntu SMP Tue Jan 29 16:28:13 UTC 2019
+(glibc: 2.27)
+
+Machine: xdeb x86_64
+
+================================================================================
+==== JavaScript Stack Trace ====================================================
+
+fs.readFile (/home/yash/git-repos/SmartStockExchange/stbc-app/server/app.js:78:9)
+FSReqWrap.readFileAfterClose [as oncomplete] (fs.js:511:3)
+
+================================================================================
+==== Native Stack Trace ========================================================
+
+ 0: [pc=0x7f920d48309b] nodereport::OnUncaughtException(v8::Isolate*) [/home/yash/git-repos/SmartStockExchange/stbc-app/server/node_modules/node-report/api.node]
+ 1: [pc=0xeaf642] v8::internal::Isolate::Throw(v8::internal::Object*, v8::internal::MessageLocation*) [node]
+ 2: [pc=0xe6520a] v8::internal::IC::ReferenceError(v8::internal::Handle<v8::internal::Name>) [node]
+ 3: [pc=0xe6cab7] v8::internal::LoadIC::Load(v8::internal::Handle<v8::internal::Object>, v8::internal::Handle<v8::internal::Name>) [node]
+ 4: [pc=0xe6d5a0] v8::internal::LoadGlobalIC::Load(v8::internal::Handle<v8::internal::Name>) [node]
+ 5: [pc=0xe6dba5] v8::internal::Runtime_LoadGlobalIC_Miss(int, v8::internal::Object**, v8::internal::Isolate*) [node]
+ 6: [pc=0x2af7375842fd] 
+
+================================================================================
+==== JavaScript Heap and Garbage Collector =====================================
+
+Heap space name: new_space
+    Memory size: 1,048,576 bytes, committed memory: 99,656 bytes
+    Capacity: 1,031,168 bytes, used: 82,248 bytes, available: 948,920 bytes
+Heap space name: old_space
+    Memory size: 21,819,392 bytes, committed memory: 20,771,696 bytes
+    Capacity: 21,289,016 bytes, used: 19,509,296 bytes, available: 1,779,720 bytes
+Heap space name: code_space
+    Memory size: 2,097,152 bytes, committed memory: 1,426,944 bytes
+    Capacity: 2,014,176 bytes, used: 1,313,344 bytes, available: 700,832 bytes
+Heap space name: map_space
+    Memory size: 1,593,344 bytes, committed memory: 1,242,000 bytes
+    Capacity: 1,558,528 bytes, used: 926,024 bytes, available: 632,504 bytes
+Heap space name: large_object_space
+    Memory size: 1,732,608 bytes, committed memory: 1,732,608 bytes
+    Capacity: 1,472,862,664 bytes, used: 1,698,760 bytes, available: 1,471,163,904 bytes
+
+Total heap memory size: 28,291,072 bytes
+Total heap committed memory: 25,272,904 bytes
+Total used heap memory: 23,529,672 bytes
+Total available heap memory: 1,475,225,880 bytes
+
+Heap memory limit: 1,501,560,832
+
+================================================================================
+==== Resource Usage ============================================================
+
+Process total resource usage:
+  User mode CPU: 1.519714 secs
+  Kernel mode CPU: 0.142219 secs
+  Average CPU Consumption : 3.69318%
+  Maximum resident set size: 72,151,040 bytes
+  Page faults: 0 (I/O required) 17725 (no I/O required)
+  Filesystem activity: 0 reads 16 writes
+
+Event loop thread resource usage:
+  User mode CPU: 1.371437 secs
+  Kernel mode CPU: 0.124311 secs
+  Average CPU Consumption : 3.32388%
+  Filesystem activity: 0 reads 16 writes
+
+================================================================================
+==== Node.js libuv Handle Summary ==============================================
+
+(Flags: R=Ref, A=Active)
+Flags  Type      Address             Details
+[-A]   async     0x0000000003f2be20  
+[--]   check     0x00007ffee34c9540  
+[R-]   idle      0x00007ffee34c95b8  
+[--]   prepare   0x00007ffee34c9630  
+[--]   check     0x00007ffee34c96a8  
+[-A]   async     0x0000000002183760  
+[R-]   timer     0x0000000003f69ac0  repeat: 0, timeout expired: 46709784 ms ago
+[R-]   tty       0x0000000003f346f8  width: 133, height: 13, file descriptor: 22, write queue size: 0, readable, writable
+[-A]   signal    0x0000000003f69c10  signum: 28 (SIGWINCH)
+[R-]   tty       0x0000000003f69d68  width: 133, height: 13, file descriptor: 25, write queue size: 0, readable, writable
+[-A]   async     0x00007f920d68bce0  
+[RA]   tcp       0x00007f9200001c18  :::8081 (not connected), send buffer size: 16384, recv buffer size: 87380, file descriptor: 26, write queue size: 0
+[-A]   timer     0x0000000003fae380  repeat: 0, timeout in: 80092 ms
+[RA]   tcp       0x0000000003fb8928  ip6-localhost:8081 connected to ip6-localhost:43706, send buffer size: 2626560, recv buffer size: 1061696, file descriptor: 27, write queue size: 0, readable, writable
+[-A]   timer     0x0000000003f5bcc0  repeat: 0, timeout in: 987 ms
+
+================================================================================
+==== System Information ========================================================
+
+Environment variables
+  CLUTTER_IM_MODULE=xim
+  NVM_DIR=/home/yash/.nvm
+  LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+  LESSCLOSE=/usr/bin/lesspipe %s %s
+  XDG_MENU_PREFIX=gnome-
+  SNAP_USER_DATA=/home/yash/snap/vscode/77
+  LANG=en_GB.UTF-8
+  DISPLAY=:0
+  GNOME_SHELL_SESSION_MODE=ubuntu
+  SNAP_REVISION=77
+  SNAP_ARCH=amd64
+  SNAP_INSTANCE_KEY=
+  NVM_CD_FLAGS=
+  USERNAME=yash
+  XDG_VTNR=2
+  GIO_LAUNCHED_DESKTOP_FILE_PID=11808
+  SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+  APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL=true
+  XDG_SESSION_ID=2
+  SNAP_USER_COMMON=/home/yash/snap/vscode/common
+  USER=yash
+  DESKTOP_SESSION=ubuntu
+  QT4_IM_MODULE=xim
+  TEXTDOMAINDIR=/usr/share/locale/
+  PWD=/home/yash/git-repos/SmartStockExchange/stbc-app/server
+  HOME=/home/yash
+  TEXTDOMAIN=im-config
+  SNAP=/snap/vscode/77
+  SSH_AGENT_PID=2585
+  TERM_PROGRAM=vscode
+  TERM_PROGRAM_VERSION=1.31.0
+  QT_ACCESSIBILITY=1
+  SNAP_COMMON=/var/snap/vscode/common
+  XDG_SESSION_TYPE=x11
+  SNAP_NAME=vscode
+  XDG_DATA_DIRS=/usr/share/ubuntu:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+  SNAP_INSTANCE_NAME=vscode
+  SNAP_DATA=/var/snap/vscode/77
+  XDG_SESSION_DESKTOP=ubuntu
+  GJS_DEBUG_OUTPUT=stderr
+  GTK_MODULES=gail:atk-bridge
+  SNAP_COOKIE=YHB5b9Hy7vw6gsDbJq76C3X5kBQGhNgm7rb4b53hDHJv
+  WINDOWPATH=2
+  TERM=xterm-256color
+  SHELL=/bin/bash
+  QT_IM_MODULE=ibus
+  XMODIFIERS=@im=ibus
+  IM_CONFIG_PHASE=2
+  NVM_BIN=/home/yash/.nvm/versions/node/v8.14.0/bin
+  XDG_CURRENT_DESKTOP=ubuntu:GNOME
+  GPG_AGENT_INFO=/run/user/1000/gnupg/S.gpg-agent:0:1
+  BAMF_DESKTOP_FILE_HINT=/var/lib/snapd/desktop/applications/vscode_vscode.desktop
+  SNAP_REEXEC=
+  GIO_LAUNCHED_DESKTOP_FILE=/var/lib/snapd/desktop/applications/vscode_vscode.desktop
+  XDG_SEAT=seat0
+  SHLVL=2
+  LANGUAGE=en_IN:en
+  GDMSESSION=ubuntu
+  GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+  LOGNAME=yash
+  DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+  XDG_RUNTIME_DIR=/run/user/1000/snap.vscode
+  XAUTHORITY=/run/user/1000/gdm/Xauthority
+  SNAP_CONTEXT=YHB5b9Hy7vw6gsDbJq76C3X5kBQGhNgm7rb4b53hDHJv
+  XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+  PATH=/home/yash/.nvm/versions/node/v8.14.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+  SNAP_VERSION=1.31.0-1549443364
+  GJS_DEBUG_TOPICS=JS ERROR;JS LOG
+  SNAP_LIBRARY_PATH=/var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
+  SESSION_MANAGER=local/xdeb:@/tmp/.ICE-unix/2490,unix/xdeb:/tmp/.ICE-unix/2490
+  LESSOPEN=| /usr/bin/lesspipe %s
+  GTK_IM_MODULE=ibus
+  OLDPWD=/home/yash/git-repos/SmartStockExchange
+  _=/home/yash/.nvm/versions/node/v8.14.0/bin/node
+  SUPPRESS_NO_CONFIG_WARNING=y
+
+Resource limits                        soft limit      hard limit
+  core file size (blocks)                       0       unlimited
+  data seg size (kbytes)                unlimited       unlimited
+  file size (blocks)                    unlimited       unlimited
+  max locked memory (bytes)              16777216        16777216
+  max memory size (kbytes)              unlimited       unlimited
+  open files                              1048576         1048576
+  stack size (bytes)                      8388608       unlimited
+  cpu time (seconds)                    unlimited       unlimited
+  max user processes                        14910           14910
+  virtual memory (kbytes)               unlimited       unlimited
+
+Loaded libraries
+  linux-vdso.so.1
+  /lib/x86_64-linux-gnu/libdl.so.2
+  /lib/x86_64-linux-gnu/librt.so.1
+  /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+  /lib/x86_64-linux-gnu/libm.so.6
+  /lib/x86_64-linux-gnu/libgcc_s.so.1
+  /lib/x86_64-linux-gnu/libpthread.so.0
+  /lib/x86_64-linux-gnu/libc.so.6
+  /lib64/ld-linux-x86-64.so.2
+  /home/yash/git-repos/SmartStockExchange/stbc-app/server/node_modules/node-report/api.node
+  /lib/x86_64-linux-gnu/libnss_files.so.2
+  /lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2
+  /lib/x86_64-linux-gnu/libnss_dns.so.2
+  /lib/x86_64-linux-gnu/libresolv.so.2
+
+================================================================================

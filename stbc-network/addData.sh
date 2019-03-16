@@ -2,9 +2,9 @@
 # Participant Company
 if [ $1 == "cp" ]
 then
-composer participant add -d '{"$class": "org.yky.stbc.Company","issuedShareCount": 0,"owner": "resource:org.yky.stbc.Trader#owner@abc.com","email": "company@abc.com","name": "ABC Corporation"}' -c admin@stbc-network
+composer participant add -d '{"$class": "org.yky.stbc.Company","issuedShareCount": 0,"owner": "resource:org.yky.stbc.Trader#yash.bhavsar@gmail.com","email": "company@new1.com","name": "ABC Corporation"}' -c admin@stbc-network
 
-composer participant add -d '{"$class": "org.yky.stbc.Company","issuedShareCount": 0,"owner": "resource:org.yky.stbc.Trader#owner@xyz.com","email": "company@xyz.com","name": "XYZ"}' -c admin@stbc-network
+composer participant add -d '{"$class": "org.yky.stbc.Company","issuedShareCount": 0,"owner": "resource:org.yky.stbc.Trader#yash.ynb@gmail.com","email": "company@new2.com","name": "new2"}' -c admin@stbc-network
 
 # <!-- Participant Trader -->
 elif [ $1 == "ct" ]
