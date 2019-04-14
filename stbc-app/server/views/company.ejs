@@ -1,7 +1,38 @@
-<form action="/company" method="POST">
+<% include partials/header %>
+
+<!-- 
 <input type="text" name="issuedShareCount" placeholder="issued share count ">
 <input type="text" name="owner" placeholder="owner">
 <input type="text" name="email" placeholder="email">
 <input type="text" name="name" placeholder="name">
 <button>submit</button>
-</form>
+</form> -->
+<section id="form" class="clearfix" >
+  <h2 style="text-align:center;">Create company</h2>
+  <div class="container-fluid h-100">
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+          <form action="/company" method="POST">
+                <div class="form-group">
+                    <input _ngcontent-c0="" class="form-control col-form-label" type="text" name="issuedShareCount" placeholder="issued share count ">
+                </div>
+                <div class="form-group">
+                  <input _ngcontent-c0="" class="form-control col-form-label" type="text" name="owner" placeholder="owner">
+              </div>
+              <div class="form-group">
+                <input _ngcontent-c0="" class="form-control col-form-label" type="text" name="email" placeholder="email">
+            </div>
+
+                <div class="form-group">
+                    <input class="form-control col-form-label" type="text" name="Company-name" placeholder="name">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-info btn-lg btn-block">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+  
+</section>
+<% include partials/footer %>

@@ -1,5 +1,9 @@
 <% include partials/header %>
 
+<section id="table" class="clearfix">
+        <h2 style="text-align:center;">
+                Buy order details
+         </h2>
 <table class="table table-bordered">
     <thead>
       <tr>
@@ -13,10 +17,10 @@
     </thead>
     <tbody>
       
-            <% data.forEach(function(data){ %>
+            <% data.forEach(function(data,id){ %>
                 <tr>
                     <td>
-                        #
+                            <%= id+1%>
                     </td>
                 <td>
                         <%= data.OrderType%>
@@ -38,4 +42,5 @@
                 <% }); %>
     
   </table>
+  </section>
   <% include partials/footer %>
