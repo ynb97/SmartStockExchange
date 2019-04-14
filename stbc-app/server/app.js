@@ -7,7 +7,7 @@ const app = express();
 const fs = require('fs');
 const FormData = require('form-data');
 app.set("view engine", "ejs");
-
+app.use("/public", express.static(__dirname + "/public"));
 /*
 to import auth.js file in app.js 
 */
@@ -15,6 +15,7 @@ passport = require('passport'),
 auth = require('./auth');
 auth(passport);
 app.use(passport.initialize());
+
 
 let act = 0;
 let username ;
@@ -60,7 +61,7 @@ var ID = function () {
 };
 
 app.get("/", function (req, res) {
-  res.render("home");
+  res.render("index");
 });
 
 
@@ -97,47 +98,47 @@ app.get("/googlelogin", function(req, res){
 act = getCookie('access_token',req);
 act = act.substr(2,64);
 
-  var args = {
-    data: {
-      participant: "org.yky.stbc.Trader#"+username,
-      userID: username,
-      options: {}
-    },
-    headers: {
-      "Content-Type": "application/json",
-      "Accept":"application/octet-stream",
-      "X-Access-Token": act,
-      "responseType": "blob"
-      }
-  }
+  // var args = {
+  //   data: {
+  //     participant: "org.yky.stbc.Trader#"+username,
+  //     userID: username,
+  //     options: {}
+  //   },
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     "Accept":"application/octet-stream",
+  //     "X-Access-Token": act,
+  //     "responseType": "blob"
+  //     }
+  // }
   
-  client.post("http://localhost:3001/api/system/identities/issue", args, function(data, response) {
+  // client.post("http://localhost:3001/api/system/identities/issue", args, function(data, response) {
 
-  console.log(JSON.stringify(data))
-    const cardData=JSON.stringify(data);
+  // console.log(JSON.stringify(data))
+  //   const cardData=JSON.stringify(data);
   
-   var file= fs.writeFileSync(`myCard.card`, data)
+  //  var file= fs.writeFileSync(`myCard.card`, data)
 
-    const formData = new FormData();
+  //   const formData = new FormData();
     
-    formData.append(file,'card');
+  //   formData.append(file,'card');
 
-    var args = {
+  //   var args = {
     
-    formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        "Accept":"application/json",
-        "X-Access-Token": act
-      }
-    }
+  //   formData,
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //       "Accept":"application/json",
+  //       "X-Access-Token": act
+  //     }
+  //   }
    
-    client.post("http://localhost:3000/api/wallet/import", args, function(data, response) {
+  //   client.post("http://localhost:3000/api/wallet/import", args, function(data, response) {
      
-    });
+  //   });
 
 
-  });
+  // });
 });
 
 
@@ -185,7 +186,7 @@ app.post("/company",function(req, res){
       "X-Access-Token": act
     }
   }
-  client.post("http://localhost:3000/api/org.yky.stbc.Company", args, function(data, response) {
+  client.post("http://localhost:3001/api/org.yky.stbc.Company", args, function(data, response) {
     // res.json(data);
   });
 });
